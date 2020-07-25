@@ -19,7 +19,7 @@ env:
 
 script:
   - python -m pip list
-  - build-bundle.py "$ANSIBLE_VERSION"
+  - ./build-bundle.py "$ANSIBLE_VERSION"
   # - tox -e build -- "$ANSIBLE_VERSION"
   - .travis/test.sh
 
