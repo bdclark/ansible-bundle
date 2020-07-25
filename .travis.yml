@@ -1,13 +1,12 @@
----
+services: docker
 language: python
 python:
-  - "2.7"
-services: docker
-
+  - '2.7'
 env:
   global:
     - ANSIBLE_VERSION=2.9.11
     - PLATFORM="linux_x86_64"
+    - ARTIFACT="ansible-bundle-$ANSIBLE_VERSION-$ANSIBLE_PLATFORM.tgz"
   matrix:
     - DOCKERFILE="Dockerfile.centos" IMAGE="centos:7"
     # - DOCKERFILE="Dockerfile.centos" IMAGE="centos:8"
@@ -22,12 +21,12 @@ script:
   - ./build-bundle.py "$ANSIBLE_VERSION"
   - .travis/test.sh
 
-jobs:
-  include:
-    - stage: lint
-    - script:
-        - pip install tox
-        - tox -e flake8
-    - stage: deploy
-      script: echo "Deploying to GitHub releases ..."
-      env: DOCKERFILE="" IMAGE=""
+deploy:
+  provider: releases
+  api_key:
+    secure: jIyI9xZoH1tqg5eXOdnBUy94pANG/Q6FtnSI064bwScvyvQg0a9/dupUfB6+flQ01M3hsK2+kVRJJ3KERf9S2tebhlFAb5e8c6AuC1/iv/ltMhZw//lm0vi9ei35+3Q0myAl46mahrE19ac3loSU9//T3om6W5sW/w1QFlnEEZBqVFWaproL6kvHmvJ2sbXDkEyvli+wegGDeU9NAIjI1uxS+H5wkDxhqz+FZbPskIDqN4tHbQul+b6QgN8rUSwT4vfAIQNvqheSBAkjpT4xJOnADBoE2ivG0jEEj1rIbWv1RPCgpghJPcSFOvf6mOD7zRsHztbq7/rUQ6cE4L0/TWV17+DCVpTNDc+yglnhl3H1URB+LSjMgsjiUFE/jqOvXquF8lOCAPcp6jRgecjjpRWBJiv/sSFHWDiIwZ2+QPL5RTtn19x3ZFNaGuWFs2lnukdEuyOWzJ/xIpc+M3Z9uLeX6g55SujEEjGcpIy0Hv7ZCibUmpl7FKKhs9wyGypew6vZpzipj/bQP7vBbuqfFxtqzZ1l3xP8kc6B2BVC29XZPJKwUvWCe4rBN7IIEhcOsmWayk+CnQ4LVGEKxfvnp3BgI8I6646z7vwNn+aslBgtQMGY0gqHpgPEpqol4ZG3llerLgEFKc2G7nLUwvJ0c96q5SuOOLb4nrWJg3Ve2FU=
+  file: build/$ARTIFACT
+  on:
+    repo: bdclark/ansible-bundle
+    tags: true
+  skip_cleanup: true

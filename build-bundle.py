@@ -19,7 +19,7 @@ import os
 import shutil
 import subprocess
 import sys
-import zipfile
+import tarfile
 from contextlib import contextmanager
 
 PACKAGE_DEPS = [
@@ -132,21 +132,15 @@ def create_bootstrap_script(scratch_dir):
     shutil.copy(install_script, os.path.join(scratch_dir, "install"))
 
 
-def zip_dir(scratch_dir, zip_filename, cleanup=True):
-    """Create zip file from scratch_dir contents."""
+def create_tarball(scratch_dir, tarball_filename, cleanup=True):
+    """Create gzipped tarball from scratch_dir contents."""
     dirname, tmpdir = os.path.split(scratch_dir)
-    final_dir_name = os.path.join(dirname, ZIP_DIRNAME)
-    if os.path.isdir(final_dir_name):
-        shutil.rmtree(final_dir_name)
-    shutil.move(scratch_dir, final_dir_name)
     with cd(dirname):
-        with zipfile.ZipFile(zip_filename, "w", zipfile.ZIP_DEFLATED) as zipped:
-            for root, dirnames, filenames in os.walk(ZIP_DIRNAME):
-                for filename in filenames:
-                    zipped.write(os.path.join(root, filename))
+        with tarfile.open(tarball_filename, "w:gz") as tar:
+            tar.add(scratch_dir, arcname=ZIP_DIRNAME)
     if cleanup:
-        shutil.rmtree(final_dir_name)
-    return os.path.join(dirname, zip_filename)
+        shutil.rmtree(scratch_dir)
+    return os.path.join(dirname, tarball_filename)
 
 
 if __name__ == "__main__":
@@ -169,8 +163,6 @@ if __name__ == "__main__":
         platform=args.platform,
     )
     create_bootstrap_script(scratch_dir)
-    zip_filename = "ansible-bundle-{}-{}.zip".format(
-        args.ansible_version, args.platform
-    )
-    zip_filename = zip_dir(scratch_dir, zip_filename)
-    print("Zipped bundle installer is at: {}".format(zip_filename))
+    tarball = "ansible-bundle-{}-{}.tgz".format(args.ansible_version, args.platform)
+    tarball = create_tarball(scratch_dir, tarball)
+    print("Bundled Ansible installer is at: {}".format(tarball))

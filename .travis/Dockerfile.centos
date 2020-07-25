@@ -4,7 +4,7 @@ FROM $IMAGE
 RUN yum install -y \
     python2 \
     python3 \
-    unzip \
+    tar \
   && yum clean all
 
 CMD ["tail", "-f", "/dev/null"]
