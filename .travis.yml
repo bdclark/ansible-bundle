@@ -36,7 +36,7 @@ jobs:
   include:
     - stage: lint
       # install: pip install tox
-      install: pip install flake8 flake8-docstrings pydocstyle flake8-isort flake8-typing-imports pep8-naming flake8-black
+      install: pip install -r requirements-flake8.txt
       script:
         - python -m pip --version
         - python --version
