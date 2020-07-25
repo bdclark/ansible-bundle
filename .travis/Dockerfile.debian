@@ -1,0 +1,10 @@
+ARG IMAGE=debian:stretch-slim
+FROM $IMAGE
+
+RUN apt-get update && apt-get install -y \
+    python \
+    python3 \
+    unzip \
+  && rm -rf /var/lib/apt/lists/*
+
+CMD ["tail", "-f", "/dev/null"]

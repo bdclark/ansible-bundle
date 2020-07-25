@@ -1,0 +1,9 @@
+{
+  "python.venvPath": "${workspaceFolder}/.tox",
+  "python.pythonPath": "${workspaceFolder}/.tox/flake8/bin/python",
+  "python.linting.flake8Enabled": true,
+  "python.linting.pylintEnabled": false,
+  "python.linting.pycodestyleEnabled": true,
+  "python.linting.pydocstyleEnabled": true,
+  "standard.engine": "semistandard"
+}

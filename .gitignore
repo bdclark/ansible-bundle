@@ -1,0 +1,20 @@
+**/.DS_Store
+
+# Editor
+.vscode/*
+!.vscode/settings.default.json
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+
+# Environments
+.tox
+.vagrant

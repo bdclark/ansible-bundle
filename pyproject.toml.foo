@@ -1,0 +1,12 @@
+[tool.black]
+line-length = 88
+target-version = ['py37']
+include = '\.pyi?$'
+exclude = '''
+(
+  # black defaults
+  /(\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|_build|buck-out|build|dist)/
+  # project specific directories
+  |/(_vendor|node_modules|.vagrant)/
+)
+'''

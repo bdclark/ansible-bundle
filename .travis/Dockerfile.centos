@@ -1,0 +1,10 @@
+ARG IMAGE=centos:7
+FROM $IMAGE
+
+RUN yum install -y \
+    python2 \
+    python3 \
+    unzip \
+  && yum clean all
+
+CMD ["tail", "-f", "/dev/null"]
