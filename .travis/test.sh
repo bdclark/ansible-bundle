@@ -9,10 +9,11 @@ die() {
 [[ -n "$IMAGE" ]] || die "IMAGE required"
 [[ -n "$DOCKERFILE" ]] || die "DOCKERFILE required"
 [[ -n "$ANSIBLE_VERSION" ]] || die "ANSIBLE_VERSION required"
+[[ -n "$PLATFORM" ]] || die "PLATFORM required"
 
 docker build -t "local/$IMAGE" -f ".travis/$DOCKERFILE" --build-arg "IMAGE=$IMAGE" .
 docker run -d --name installer -v "$(pwd)/build:/build" "local/$IMAGE"
-docker exec installer unzip "/build/ansible-bundle-$ANSIBLE_VERSION.zip"
+docker exec installer unzip "/build/ansible-bundle-$ANSIBLE_VERSION-$PLATFORM.zip"
 docker exec installer python2 ./ansible-bundle/install -i /opt/ansible-py2
 docker exec installer python3 ./ansible-bundle/install -i /opt/ansible-py3 -l /usr/local/bin
 docker exec installer ls -al /usr/local/bin

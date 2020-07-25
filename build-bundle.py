@@ -161,7 +161,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     scratch_dir, package_dir = create_scratch_dir()
-    print("Bundle dir at: %s" % scratch_dir)
+    print("Bundle dir at: {}".format(scratch_dir))
     download_packages(
         dirname=package_dir,
         ansible_version=args.ansible_version,
@@ -173,4 +173,4 @@ if __name__ == "__main__":
         args.ansible_version, args.platform
     )
     zip_filename = zip_dir(scratch_dir, zip_filename)
-    print("Zipped bundle installer is at: %s" % zip_filename)
+    print("Zipped bundle installer is at: {}".format(zip_filename))

@@ -7,6 +7,7 @@ services: docker
 env:
   global:
     - ANSIBLE_VERSION=2.9.11
+    - PLATFORM="linux_x86_64"
   matrix:
     - DOCKERFILE="Dockerfile.centos" IMAGE="centos:7"
     # - DOCKERFILE="Dockerfile.centos" IMAGE="centos:8"
@@ -18,7 +19,6 @@ env:
     # - DOCKERFILE="Dockerfile.debian" IMAGE="ubuntu:20.04"
 
 script:
-  - python -m pip list
   - ./build-bundle.py "$ANSIBLE_VERSION"
   - .travis/test.sh
 
