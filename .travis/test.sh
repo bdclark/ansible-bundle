@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 die() {
    [[ -n "$1" ]] && >&2 echo "Error: $1"
@@ -9,11 +9,6 @@ die() {
 [[ -n "$IMAGE" ]] || die "IMAGE required"
 [[ -n "$DOCKERFILE" ]] || die "DOCKERFILE required"
 [[ -n "$ANSIBLE_VERSION" ]] || die "ANSIBLE_VERSION required"
-
-echo "ANSIBLE_VERSION=$ANSIBLE_VERSION"
-echo "DOCKERFILE=$DOCKERFILE"
-echo "IMAGE=$IMAGE"
-exit 0
 
 docker build -t "local/$IMAGE" -f ".travis/$DOCKERFILE" --build-arg "IMAGE=$IMAGE" .
 docker run -d --name installer -v "$(pwd)/build:/build" "local/$IMAGE"

@@ -20,10 +20,14 @@ env:
 script:
   - python -m pip list
   - ./build-bundle.py "$ANSIBLE_VERSION"
-  # - tox -e build -- "$ANSIBLE_VERSION"
   - .travis/test.sh
 
 jobs:
   include:
+    - stage: lint
+    - script:
+        - pip install tox
+        - tox -e flake8
     - stage: deploy
       script: echo "Deploying to GitHub releases ..."
+      env: DOCKERFILE="" IMAGE=""
