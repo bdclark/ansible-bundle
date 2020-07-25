@@ -13,7 +13,7 @@ die() {
 
 docker build -t "local/$IMAGE" -f ".travis/$DOCKERFILE" --build-arg "IMAGE=$IMAGE" .
 docker run -d --name installer -v "$(pwd)/build:/build" "local/$IMAGE"
-docker exec installer tar xzf "/build/$ARTIFACT.tgz"
+docker exec installer tar xzf "/build/$ARTIFACT"
 docker exec installer python2 ./ansible-bundle/install -i /opt/ansible-py2
 docker exec installer python3 ./ansible-bundle/install -i /opt/ansible-py3 -l /usr/local/bin
 docker exec installer ls -al /usr/local/bin
