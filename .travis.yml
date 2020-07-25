@@ -35,7 +35,10 @@ script:
 jobs:
   include:
     - stage: lint
-      install: pip install tox
-      script: tox -e flake8
+      # install: pip install tox
+      install: pip install flake8 flake8-docstrings pydocstyle flake8-isort flake8-typing-imports pep8-naming flake8-black
+      script:
+        - python -m pip --version
+        - python --version
     - stage: deploy
       script: echo "Deploying to GitHub releases ..."
