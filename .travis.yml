@@ -4,11 +4,6 @@ python:
   - "2.7"
 services: docker
 
-stages:
-  - lint
-  - test
-  - deploy
-
 env:
   global:
     - ANSIBLE_VERSION=2.9.11
@@ -22,23 +17,15 @@ env:
     # - DOCKERFILE="Dockerfile.debian" IMAGE="ubuntu:18.04"
     # - DOCKERFILE="Dockerfile.debian" IMAGE="ubuntu:20.04"
 
-install:
-  - pip install tox
-  - pip install --upgrade pip
-
 script:
   - python --version
   - python -m pip --version
+  - python -m pip list
+  - build-bundle.py "$ANSIBLE_VERSION"
   # - tox -e build -- "$ANSIBLE_VERSION"
   - .travis/test.sh
 
 jobs:
   include:
-    - stage: lint
-      # install: pip install tox
-      install: pip install -r requirements-flake8.txt
-      script:
-        - python -m pip --version
-        - python --version
     - stage: deploy
       script: echo "Deploying to GitHub releases ..."
