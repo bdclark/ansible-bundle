@@ -21,10 +21,9 @@ docker exec installer ls -al /usr/local/bin
 docker exec installer /usr/local/bin/ansible --version
 
 docker exec installer python3 --version
-py3_version="$(docker exec installer python3 -c 'import sys; print("%s.%s" % sys.version_info[:2])')"
-if [ "$(echo "$py3_version" | cut -d'.' -f2)" -gt "4" ]; then
+if [ "$(docker exec installer python3 -c 'import sys; print(sys.version_info.minor)')" -gt "4" ]; then
   docker exec installer python3 ./ansible-bundle/install -i /opt/ansible-py3
   docker exec installer /opt/ansible-py3/bin/ansible --version
 else
-  echo "Not testing for Python3 since it appears to be an incompatible version ($py3_version)"
+  echo "Not testing for Python3 since it appears to be an incompatible version"
 fi
