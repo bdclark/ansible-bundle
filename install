@@ -116,7 +116,7 @@ def pip_install_packages(install_dir):
 def _pip_install_package(install_dir, package):
     pip_script = os.path.join(install_dir, "bin", "pip")
     run(
-        "%s install --no-build-isolation --no-cache-dir --no-index --find-links %s %s"
+        "%s install --no-cache-dir --no-index --find-links %s %s"
         % (pip_script, PACKAGES_DIR, package)
     )
 
