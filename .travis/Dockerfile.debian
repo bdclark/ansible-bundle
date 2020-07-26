@@ -5,6 +5,10 @@ RUN apt-get update && apt-get install -y \
     python \
     python3 \
     tar \
+  && if [ "$(python3 -c 'import sys; print(sys.version_info.minor)')" -gt "4" ]; \
+    then \
+      apt-get install -y python3-venv; \
+    fi \
   && rm -rf /var/lib/apt/lists/*
 
 CMD ["tail", "-f", "/dev/null"]

@@ -39,8 +39,8 @@ PACKAGE_DEPS = [
     ("wheel", "0.34.2", False),
 ]
 PLATFORMS = {
-    "linux_x86_64": "manylinux2010_x86_64",
-    "macosx_x86_64": "macosx_10_10_x86_64",
+    "linux_x86_64": ["manylinux1_x86_64", "manylinux2010_x86_64"],
+    "macosx_x86_64": ["macosx_10_10_x86_64"],
 }
 PYTHON_VERSIONS = ["2.7", "3.5", "3.6", "3.7", "3.8"]
 
@@ -108,16 +108,17 @@ def _download_package_tarball(dirname, package, version):
 
 
 def _download_binary_package(dirname, package, version, platform):
-    for py_ver in PYTHON_VERSIONS:
-        cmd = (
-            "%s -m pip download %s==%s --only-binary :all: "
-            "--platform %s --python-version %s --no-deps"
-        ) % (sys.executable, package, version, PLATFORMS[platform], py_ver)
-        if py_ver == "2.7" and platform == "linux_x86_64":
-            for abi in ["cp27m", "cp27mu"]:
-                run("%s --abi %s" % (cmd, abi))
-        else:
-            run(cmd)
+    for platform_ver in PLATFORMS[platform]:
+        for python_ver in PYTHON_VERSIONS:
+            cmd = (
+                "%s -m pip download %s==%s --only-binary :all: "
+                "--platform %s --python-version %s --no-deps"
+            ) % (sys.executable, package, version, platform_ver, python_ver)
+            if python_ver == "2.7" and platform == "linux_x86_64":
+                for abi in ["cp27m", "cp27mu"]:
+                    run("%s --abi %s" % (cmd, abi))
+            else:
+                run(cmd)
 
 
 def _remove_cli_zip(scratch_dir):

@@ -14,8 +14,17 @@ die() {
 docker build -t "local/$IMAGE" -f ".travis/$DOCKERFILE" --build-arg "IMAGE=$IMAGE" .
 docker run -d --name installer -v "$(pwd)/build:/build" "local/$IMAGE"
 docker exec installer tar xzf "/build/$ARTIFACT"
-docker exec installer python2 ./ansible-bundle/install -i /opt/ansible-py2
-docker exec installer python3 ./ansible-bundle/install -i /opt/ansible-py3 -l /usr/local/bin
+
+docker exec installer python2 --version
+docker exec installer python2 ./ansible-bundle/install -i /opt/ansible-py2 -l /usr/local/bin
 docker exec installer ls -al /usr/local/bin
-docker exec installer /opt/ansible-py2/bin/ansible --version
 docker exec installer /usr/local/bin/ansible --version
+
+docker exec installer python3 --version
+py3_version="$(docker exec installer python3 -c 'import sys; print("%s.%s" % sys.version_info[:2])')"
+if [ "$(echo "$py3_version" | cut -d'.' -f2)" -gt "4" ]; then
+  docker exec installer python3 ./ansible-bundle/install -i /opt/ansible-py3
+  docker exec installer /opt/ansible-py3/bin/ansible --version
+else
+  echo "Not testing for Python3 since it appears to be an incompatible version ($py3_version)"
+fi
